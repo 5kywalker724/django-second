@@ -1,11 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from .validators import CustomValidator
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, RegexValidator
 
 
 class AdvUser(AbstractUser):
+
+    login_validator = RegexValidator(
+        regex=r"^[a-zA-Z-]+$",
+        message="Введите допустимое слово. Должно содержать латиницу и дефисы."
+    )
+
+    fio_validator = RegexValidator(
+        regex=r"^[а-яА-Я-]+\s[а-яА-Я-]+\s[а-яА-Я-]+$",
+        message="Введите допустимое слово. Должно содержать кириллицу, пробелы и дефисы"
+    )
+
     username = models.CharField(
         verbose_name="Логин",
         max_length=150,
@@ -14,12 +24,14 @@ class AdvUser(AbstractUser):
         help_text=(
             "Разрешается использовать только латиницу и дефис."
         ),
-        validators=[UnicodeUsernameValidator],
+        validators=[login_validator, MinLengthValidator(4)],
         error_messages={
             "unique": "Пользователь с таким именем уже существует.",
         },
     )
-    first_name = models.CharField(verbose_name="Имя", max_length=150, blank=False)
-    last_name = models.CharField(verbose_name="Фамилия", max_length=150, blank=False)
+    first_name = models.CharField(verbose_name="ФИО", max_length=150, blank=False, validators=[fio_validator], help_text=(
+            "Разрешается использовать только кириллицу, пробелы и дефис."))
     email = models.EmailField(verbose_name="Почта", blank=False)
-    patronymic = models.CharField(blank=False, verbose_name="Отчество", max_length=150)
+
+    last_name = None
+

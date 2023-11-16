@@ -8,4 +8,4 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = AdvUser
-        fields = ('last_name', 'first_name', 'patronymic', 'username', 'email', 'password1', 'password2', 'is_treatment')
+        fields = ('first_name', 'username', 'email', 'password1', 'password2', 'is_treatment')
