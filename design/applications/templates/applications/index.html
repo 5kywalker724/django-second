@@ -7,12 +7,12 @@
     <h3>Добро пожаловать! {{user.first_name}}</h3>
     {% if num_complete %}
     <p>Список последних выполненных заявок:</p>
-    <ul>
     {% for app in num_complete %}
-        <li>{{app.date_app}}</li>
-        <li>{{app.name_app}}</li>
-        <li>{{app.category}}</li>
+        <li><strong>Дата:</strong> {{app.date_app}}</li>
+        <li><strong>Название:</strong> {{app.name_app}}</li>
+        <li><strong>Категория:</strong> {{app.category}}</li>
         <li><img class="img" src="/media/{{ app.image_app }}"></li>
+        {% if not forloop.last %}<hr>{% endif %}
     {% endfor %}
     </ul>
     {% else %}

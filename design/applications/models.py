@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator, FileExtensionValidator
-from django.core.exceptions import ValidationError
 
 
 class AdvUser(AbstractUser):
@@ -45,18 +44,11 @@ class CategoryApplication(models.Model):
 
 class Application(models.Model):
 
-    def validate_image(fieldfile_obj):
-        filesize = fieldfile_obj.file.size
-        megabyte_limit = 2.0
-        if filesize > megabyte_limit * 1024 * 1024:
-            raise ValidationError("Max file size is %sMB" % str(megabyte_limit))
-
     date_app = models.DateTimeField(verbose_name="Временная метка", auto_now_add=True)
     name_app = models.CharField(verbose_name="Название", max_length=50, blank=False)
     desc_app = models.CharField(verbose_name="Описание", max_length=200, blank=False)
     category = models.ForeignKey(CategoryApplication, on_delete=models.CASCADE, blank=False)
-    image_app = models.ImageField(verbose_name="Фотография", upload_to='images/',
-                                  validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg', 'bmp'])])
+    image_app = models.ImageField(verbose_name="Фотография", upload_to='images/', blank=False)
     user = models.ForeignKey(AdvUser, on_delete=models.CASCADE, verbose_name="Пользователь")
 
     STATUS_CHOICES = (
