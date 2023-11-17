@@ -129,3 +129,9 @@ LOGIN_REDIRECT_URL = '/'
 runserver.default_port = "8080"
 
 AUTH_USER_MODEL = 'applications.AdvUser'
+
+AUTH_PASSWORD_VALIDATORS = []
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

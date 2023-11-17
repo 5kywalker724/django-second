@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.validators import UnicodeUsernameValidator
-from django.core.validators import MinLengthValidator, RegexValidator
+from django.core.validators import RegexValidator, FileExtensionValidator
+from django.core.exceptions import ValidationError
 
 
 class AdvUser(AbstractUser):
@@ -24,7 +24,7 @@ class AdvUser(AbstractUser):
         help_text=(
             "Разрешается использовать только латиницу и дефис."
         ),
-        validators=[login_validator, MinLengthValidator(4)],
+        validators=[login_validator],
         error_messages={
             "unique": "Пользователь с таким именем уже существует.",
         },
@@ -35,3 +35,38 @@ class AdvUser(AbstractUser):
 
     last_name = None
 
+
+class CategoryApplication(models.Model):
+    cat_name = models.CharField(verbose_name="Категория", max_length=100, blank=False)
+
+    def __str__(self):
+        return self.cat_name
+
+
+class Application(models.Model):
+
+    def validate_image(fieldfile_obj):
+        filesize = fieldfile_obj.file.size
+        megabyte_limit = 2.0
+        if filesize > megabyte_limit * 1024 * 1024:
+            raise ValidationError("Max file size is %sMB" % str(megabyte_limit))
+
+    date_app = models.DateTimeField(verbose_name="Временная метка", auto_now_add=True)
+    name_app = models.CharField(verbose_name="Название", max_length=50, blank=False)
+    desc_app = models.CharField(verbose_name="Описание", max_length=200, blank=False)
+    category = models.ForeignKey(CategoryApplication, on_delete=models.CASCADE, blank=False)
+    image_app = models.ImageField(verbose_name="Фотография", upload_to='images/',
+                                  validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg', 'bmp'])])
+    user = models.ForeignKey(AdvUser, on_delete=models.CASCADE, verbose_name="Пользователь")
+
+    STATUS_CHOICES = (
+        ('Н', 'Новая'),
+        ('П', 'Принята в работу'),
+        ('В', 'Выполнено'),
+    )
+
+    status_app = models.CharField(verbose_name="Статус заявки", max_length=1, choices=STATUS_CHOICES, blank=False,
+                                  default='Н')
+
+    def __str__(self):
+        return f"{self.name_app}, {self.category}"

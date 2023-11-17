@@ -5,14 +5,20 @@
     
     {% if user.is_authenticated %}
     <h3>Добро пожаловать! {{user.first_name}}</h3>
-    <p>Список 4-х последних выполненных заявок:</p>
+    {% if num_complete %}
+    <p>Список последних выполненных заявок:</p>
     <ul>
-        <li>Временная метка</li>
-        <li>Название</li>
-        <li>Категория заявки</li>
-        <li>Фотография</li>
+    {% for app in num_complete %}
+        <li>{{app.date_app}}</li>
+        <li>{{app.name_app}}</li>
+        <li>{{app.category}}</li>
+        <li><img class="img" src="/media/{{ app.image_app }}"></li>
+    {% endfor %}
     </ul>
-    <p>Количество заявок находящихся в работе: 10</p>
+    {% else %}
+    <p>На данный момент выполненных заявок нет</p>
+    {% endif %}
+    <p>Количество заявок находящихся в работе: {{ num_applications }}</p>
     {% else %}
     <h3>Добро пожаловать!</h3>
     <p>Для продолжения <a href="{% url 'login' %}">войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a></p>

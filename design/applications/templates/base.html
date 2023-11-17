@@ -23,7 +23,7 @@
               <li><a href="{% url 'index' %}">Главная страница</a></li>
               {% if user.is_authenticated %}
                 <li><a href="">Личный кабинет</a></li>
-                <li><a href="">Выход</a></li>
+                <li><a href="{% url 'logout' %}?next={% url 'index' %}">Выход</a></li>
               {% else %}
                 <li><a href="{% url 'login' %}">Вход</a></li>
                 <li><a href="{% url 'register' %}">Регистрация</a></li>
