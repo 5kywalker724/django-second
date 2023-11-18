@@ -2,9 +2,8 @@
 
 {% block content %}
     <h1>Главная страница</h1>
-    
-    {% if user.is_authenticated %}
-    <h3>Добро пожаловать! {{user.first_name}}</h3>
+
+    <h3>Добро пожаловать!</h3>
     {% if num_complete %}
     <p>Список последних выполненных заявок:</p>
     {% for app in num_complete %}
@@ -19,8 +18,4 @@
     <p>На данный момент выполненных заявок нет</p>
     {% endif %}
     <p>Количество заявок находящихся в работе: {{ num_applications }}</p>
-    {% else %}
-    <h3>Добро пожаловать!</h3>
-    <p>Для продолжения <a href="{% url 'login' %}">войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a></p>
-    {% endif %}
 {% endblock %}
