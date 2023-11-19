@@ -24,7 +24,6 @@
               {% if user.is_authenticated %}
                 <li><a href="{% url 'profile' %}">Личный кабинет</a></li>
                 <li><a href="{% url 'create' %}">Создать заявку</a></li>
-                <li><a href="">Удалить заявку</a></li>
                 <li><a href="{% url 'logout' %}?next={% url 'index' %}">Выход</a></li>
               {% else %}
                 <li><a href="{% url 'login' %}">Вход</a></li>

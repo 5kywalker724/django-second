@@ -13,6 +13,13 @@ class RegisterForm(UserCreationForm):
 
 
 class CreateApplicationForm(forms.ModelForm):
+
+    def clean(self):
+        image = self.cleaned_data.get('image_app')
+
+        if image.size > 2097152:
+            raise ValidationError("Прикрепляемая фотография должна быть меньше чем 2МБ")
+
     class Meta:
         model = Application
         fields = ('name_app', 'desc_app', 'category', 'image_app')

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, DeleteView
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, CreateApplicationForm
 from .models import *
@@ -48,3 +48,8 @@ class CreateApplicationView(CreateView):
         form.instance.user = self.request.user
         return super(CreateApplicationView, self).form_valid(form)
 
+
+class DeleteApplicationView(DeleteView):
+    model = Application
+    template_name = 'applications/delete_application.html'
+    success_url = reverse_lazy('profile')
