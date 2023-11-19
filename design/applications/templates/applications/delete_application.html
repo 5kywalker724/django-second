@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base_generic.html" %}
 
-</body>
-</html>
+{% block content %}
+
+<h1>Удаление заявки</h1>
+
+{% if user.is_authenticated %}
+    <p>Вы не можете удалить заявку со статусом "Выполнено" или "Принято в работу"</p>
+
+    <p>Вы уверены, что хотите удалить заявку?</p>
+
+    <form action="" method="POST">
+      {% csrf_token %}
+      <input type="submit" action="" value="Да, удалить.">
+    </form>
+{% else %}
+    <p>Для продолжения работы <a href="{% url 'login' %}">войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a></p>
+{% endif %}
+
+{% endblock %}

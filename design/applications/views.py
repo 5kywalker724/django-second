@@ -24,10 +24,16 @@ class RegisterView(CreateView):
 
 @login_required()
 def UserProfile(request):
-    applications = Application.objects.filter(user=request.user).order_by('-date_app')
+    status_filter = request.GET.get('status_app', 'all')
+
+    if status_filter == 'all':
+        applications = Application.objects.filter(user=request.user).order_by('-date_app')
+    else:
+        applications = Application.objects.filter(user=request.user, status_app=status_filter).order_by('-date_app')
 
     context = {
         'applications': applications,
+        'status_filter': status_filter,
     }
 
     return render(request, 'applications/profile.html', context)
